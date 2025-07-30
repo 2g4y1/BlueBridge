@@ -12,15 +12,18 @@ subprojects {
     //Add maintainers here (separated by a comma and space). This will be added to the plugin.yml.
     def authors = 'Mark_225'
 
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    sourceCompatibility = 21
+    targetCompatibility = 21
 
     group 'de.mark225'
 
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
+        maven {
+            name = "papermc"
+            url = uri("https://repo.papermc.io/repository/maven-public/")
+        }
     }
 
     configurations {
@@ -29,7 +32,7 @@ subprojects {
     }
 
     dependencies {
-        provided "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
+        compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
         provided 'com.flowpowered:flow-math:1.0.3'
     }
 

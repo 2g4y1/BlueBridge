@@ -115,23 +115,23 @@ public class RegionStringLookup extends StringLookupWrapper {
     }
 
     private String getWidth(){
-        return "" + (region.getMaximumPoint().getX() + 1 - region.getMinimumPoint().getX());
+        return "" + (region.getMaximumPoint().x() + 1 - region.getMinimumPoint().x());
     }
 
     private  String getLength(){
-        return "" + (region.getMaximumPoint().getZ() + 1 - region.getMinimumPoint().getZ());
+        return "" + (region.getMaximumPoint().z() + 1 - region.getMinimumPoint().z());
     }
 
     private String getHeight(){
-        return "" + (region.getMaximumPoint().getY() + 1 - region.getMinimumPoint().getY());
+        return "" + (region.getMaximumPoint().y() + 1 - region.getMinimumPoint().y());
     }
 
     private String getBottom(int offset){
-        return "" + (region.getMinimumPoint().getY() - offset);
+        return "" + (region.getMinimumPoint().y() - offset);
     }
 
     private String getTop(int offset){
-        return "" + (region.getMaximumPoint().getY() + 1 - offset);
+        return "" + (region.getMaximumPoint().y() + 1 - offset);
     }
 
     private String getName(boolean forceId){
@@ -158,22 +158,22 @@ public class RegionStringLookup extends StringLookupWrapper {
         BlockVector3 delta = region.getMaximumPoint().add(1, 1, 1).subtract(region.getMinimumPoint());
         if (region instanceof ProtectedCuboidRegion) {
             int dX, dZ;
-            dX = delta.getX();
-            dZ = delta.getZ();
+            dX = delta.x();
+            dZ = delta.z();
             area2D = area2D.add(BigInteger.valueOf(dX));
             area2D = area2D.multiply(BigInteger.valueOf(dZ));
         } else if (region instanceof ProtectedPolygonalRegion) {
             List<BlockVector2> points = region.getPoints();
             for (int i = 0; i < points.size(); i++) {
-                BigInteger b1 = BigInteger.valueOf(points.get(i).getX()).multiply(BigInteger.valueOf(points.get((i + 1) % points.size()).getZ()));
-                BigInteger b2 = BigInteger.valueOf(points.get((i + 1) % points.size()).getX()).multiply(BigInteger.valueOf(points.get(i).getZ()));
+                BigInteger b1 = BigInteger.valueOf(points.get(i).x()).multiply(BigInteger.valueOf(points.get((i + 1) % points.size()).z()));
+                BigInteger b2 = BigInteger.valueOf(points.get((i + 1) % points.size()).x()).multiply(BigInteger.valueOf(points.get(i).z()));
                 area2D = area2D.add(b1.subtract(b2));
             }
             area2D = area2D.divide(BigInteger.valueOf(2l));
             area2D = area2D.abs();
         }
         if (height) {
-            return area2D.multiply(BigInteger.valueOf(delta.getY())).toString();
+            return area2D.multiply(BigInteger.valueOf(delta.y())).toString();
         }
         return area2D.toString();
     }

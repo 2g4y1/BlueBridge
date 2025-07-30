@@ -136,9 +136,9 @@ public class WorldGuardIntegration {
                 return new RegionSnapshotBuilder(BlueBridgeWG.getInstance().getAddon(), pr.getId(), points, worldUUID)
                         .setHtmlDisplay(parseHtmlDisplay(pr))
                         .setShortName(pr.getId())
-                        .setHeight(extrude ? pr.getMinimumPoint().getBlockY() : height)
+                        .setHeight(extrude ? pr.getMinimumPoint().y() : height)
                         .setExtrude(extrude)
-                        .setUpperHeight(pr.getMaximumPoint().getBlockY() + 1)
+                        .setUpperHeight(pr.getMaximumPoint().y() + 1)
                         .setDepthCheck(depthCheck)
                         .setColor(colorRGBA)
                         .setBorderColor(colorRGB)
@@ -158,8 +158,8 @@ public class WorldGuardIntegration {
         if (region instanceof ProtectedCuboidRegion) {
             BlockVector3 blockVectorMin = region.getMinimumPoint();
             BlockVector3 blockVectorMax = region.getMaximumPoint();
-            Vector2d min = new Vector2d(blockVectorMin.getX(), blockVectorMin.getZ());
-            Vector2d max = new Vector2d(blockVectorMax.getX(), blockVectorMax.getZ());
+            Vector2d min = new Vector2d(blockVectorMin.x(), blockVectorMin.z());
+            Vector2d max = new Vector2d(blockVectorMax.x(), blockVectorMax.z());
             List<Vector2d> list = new ArrayList<>();
             list.add(min);
             list.add(new Vector2d(max.getX() + 1, min.getY()));
@@ -167,14 +167,14 @@ public class WorldGuardIntegration {
             list.add(new Vector2d(min.getX(), max.getY() + 1));
             return list;
         }
-        return region.getPoints().stream().map(bv2 -> new Vector2d(bv2.getX() + 0.5, bv2.getZ() + 0.5)).collect(Collectors.toList());
+        return region.getPoints().stream().map(bv2 -> new Vector2d(bv2.x() + 0.5, bv2.z() + 0.5)).collect(Collectors.toList());
     }
 
     private int polygonArea(List<BlockVector2> coordinates) {
         int size = coordinates.size();
         int sum = 0;
         for (int i = 0; i < size; i++) {
-            sum += (coordinates.get(i).getX() * coordinates.get((i + 1) % size).getZ()) - (coordinates.get(i).getZ() * coordinates.get((i + 1) % size).getX());
+            sum += (coordinates.get(i).x() * coordinates.get((i + 1) % size).z()) - (coordinates.get(i).z() * coordinates.get((i + 1) % size).x());
         }
         return Math.abs((int) ((double) sum / 2d));
     }

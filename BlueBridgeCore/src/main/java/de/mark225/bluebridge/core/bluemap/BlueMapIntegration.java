@@ -15,7 +15,7 @@ import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.update.UpdateTask;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -101,7 +101,7 @@ public class BlueMapIntegration {
             ExtrudeMarker em = ExtrudeMarker.builder()
                     .position(pos)
                     .shape(shape, rs.getHeight(), rs.getUpperHeight())
-                    .label(StringEscapeUtils.escapeHtml(rs.getShortName()))
+                    .label(StringEscapeUtils.escapeHtml4(rs.getShortName()))
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
                     .fillColor(rs.getColor())
@@ -113,7 +113,7 @@ public class BlueMapIntegration {
             ShapeMarker sm = ShapeMarker.builder()
                     .position(pos)
                     .shape(shape, rs.getHeight())
-                    .label(StringEscapeUtils.escapeHtml(rs.getShortName()))
+                    .label(StringEscapeUtils.escapeHtml4(rs.getShortName()))
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
                     .fillColor(rs.getColor())

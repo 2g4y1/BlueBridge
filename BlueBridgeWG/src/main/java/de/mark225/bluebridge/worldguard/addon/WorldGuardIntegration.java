@@ -107,10 +107,20 @@ public class WorldGuardIntegration {
         RegionContainer regions = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager rm = regions.get(w);
         if (rm != null) {
+            // compile exclude patterns from config
+            List<Pattern> excludePatterns = BlueBridgeWGConfig.getInstance().excludePatterns();
+
             return rm.getRegions().values().stream().filter(pr -> {
                 //filter all regions that shall not be rendered
                 StateFlag.State state = pr.getFlag(RENDER_FLAG);
-                return pr.getPoints().size() >= 3 && (((state == null) && BlueBridgeWGConfig.getInstance().defaultRender()) || (state == StateFlag.State.ALLOW));
+                boolean shouldRender = pr.getPoints().size() >= 3 && (((state == null) && BlueBridgeWGConfig.getInstance().defaultRender()) || (state == StateFlag.State.ALLOW));
+                if (!shouldRender) return false;
+                // check exclude patterns (match against region id)
+                String id = pr.getId();
+                for (Pattern p : excludePatterns) {
+                    if (p.matcher(id).matches()) return false;
+                }
+                return true;
             }).map(pr -> {
                 //Convert polygon points to Verctor2d List
                 List<Vector2d> points = getPointsForRegion(pr);

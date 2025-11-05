@@ -9,6 +9,12 @@ markerSetName: "WorldGuard Regions"
 # This setting can be overwritten for individual regions using the WorldGuard flag "bluemap-extrude".
 defaultExtrude: false
 
+# List of regex patterns for region IDs that should be excluded from rendering.
+# By default we exclude BetterStructures auto-generated regions which often start with
+# "betterstructures_". Patterns are regular expressions.
+excludePatterns:
+  - '^betterstructures_.*'
+
 # Preset of the html formatted text to be displayed when clicking on a region in Bluemap.
 # Html and CSS are supported.
 # Look up YAML multiline string syntax if you want to use a custom preset.

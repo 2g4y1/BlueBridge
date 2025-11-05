@@ -29,7 +29,15 @@ public class BlueBridgeWG extends JavaPlugin {
         instance = this;
         updateConfig();
         integration = new WorldGuardIntegration();
-        integration.init();
+        if (!integration.init()) {
+            getLogger().severe("========================================");
+            getLogger().severe("Failed to initialize WorldGuard integration!");
+            getLogger().severe("This plugin MUST be loaded during server startup.");
+            getLogger().severe("Do NOT use /plugman load or similar commands!");
+            getLogger().severe("Add this plugin to your plugins folder and restart the server.");
+            getLogger().severe("========================================");
+            // Plugin will continue but with limited functionality
+        }
         addon = new BlueBridgeWGAddon();
         AddonRegistry.register(addon);
     }

@@ -37,11 +37,11 @@ public class BlueMapIntegration {
             BlueBridgeCore.getInstance().reloadAddons();
             createMarkerSets();
             reloadExclusions();
-            UpdateTask.worlds.clear();
+            UpdateTask.getWorlds().clear();
             UpdateTask.resetLastSnapshots();
             for (World bukkitWorld : Bukkit.getWorlds()) {
                 UUID uuid = bukkitWorld.getUID();
-                blueMapAPI.getWorld(uuid).ifPresent(blueMapWorld -> UpdateTask.worlds.put(uuid, blueMapWorld));
+                blueMapAPI.getWorld(uuid).ifPresent(blueMapWorld -> UpdateTask.getWorlds().put(uuid, blueMapWorld));
             }
             BlueBridgeCore.getInstance().addAllActiveRegions();
             BlueBridgeCore.getInstance().startUpdateTask();
@@ -93,7 +93,7 @@ public class BlueMapIntegration {
     }
 
     private Collection<BlueMapMap> getMapsForWorld(UUID world) {
-        return UpdateTask.worlds.get(world).getMaps();
+        return UpdateTask.getWorlds().get(world).getMaps();
     }
 
     private void addToMarkerSet(MarkerSet ms, RegionSnapshot rs, Shape shape, Vector3d pos) {

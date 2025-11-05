@@ -3,5 +3,7 @@ main: de.mark225.bluebridge.worldguard.BlueBridgeWG
 version: ${gradleVersion}
 authors: [ ${ contributors } ]
 website: https://github.com/Mark-225/BlueBridge
-api-version: 1.13
+api-version: 1.21
 depend: [ "BlueBridgeCore", "WorldGuard" ]
+description: WorldGuard integration for BlueBridge. WARNING - This plugin MUST be present at server startup and cannot be loaded at runtime with PlugMan or similar tools due to WorldGuard flag registration requirements.
+load: STARTUP

@@ -16,6 +16,8 @@ import java.util.logging.Level;
 
 public class GriefPreventionListener implements Listener {
 
+    private static final long SCHEDULE_DELAY_TICKS = 0L;
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClaimCreated(ClaimCreatedEvent e) {
         if (BlueBridgeConfig.debug())
@@ -61,7 +63,7 @@ public class GriefPreventionListener implements Listener {
             while (toUpdate.parent != null)
                 toUpdate = toUpdate.parent;
             BlueBridgeGP.getInstance().getGPIntegration().addOrUpdateClaim(toUpdate);
-        }, 0l);
+        }, SCHEDULE_DELAY_TICKS);
     }
 
 }

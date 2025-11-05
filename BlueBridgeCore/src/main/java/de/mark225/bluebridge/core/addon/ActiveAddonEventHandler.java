@@ -2,13 +2,13 @@ package de.mark225.bluebridge.core.addon;
 
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 
 public class ActiveAddonEventHandler {
-    private static List<RegionSnapshot> addedOrUpdated = new ArrayList<>();
-    private static List<RegionSnapshot> deleted = new ArrayList<>();
+    private static final CopyOnWriteArrayList<RegionSnapshot> addedOrUpdated = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<RegionSnapshot> deleted = new CopyOnWriteArrayList<>();
 
     public static void addOrUpdate(RegionSnapshot region) {
         addedOrUpdated.add(region);
@@ -19,8 +19,8 @@ public class ActiveAddonEventHandler {
     }
 
     public static void resetLists() {
-        addedOrUpdated = new ArrayList<>();
-        deleted = new ArrayList<>();
+        addedOrUpdated.clear();
+        deleted.clear();
     }
 
     public static void collectAndReset(BiConsumer<List<RegionSnapshot>, List<RegionSnapshot>> callback) {

@@ -19,13 +19,17 @@ import java.util.concurrent.ConcurrentMap;
 
 public class UpdateTask extends BukkitRunnable {
 
-    public static ConcurrentMap<UUID, BlueMapWorld> worlds = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<UUID, BlueMapWorld> worlds = new ConcurrentHashMap<>();
 
     private static ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> lastSnapshots = new ConcurrentHashMap<>();
 
     private static UpdateTask currentTask;
 
     private static boolean locked = true;
+
+    public static ConcurrentMap<UUID, BlueMapWorld> getWorlds() {
+        return worlds;
+    }
 
     public static synchronized void resetLastSnapshots() {
         lastSnapshots.clear();
@@ -64,7 +68,7 @@ public class UpdateTask extends BukkitRunnable {
     }
 
     private void collectSnapshots(BlueBridgeAddon addon, ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots){
-        for (UUID world : worlds.keySet()) {
+        for (UUID world : getWorlds().keySet()) {
             ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
             if (newSnapshots.containsKey(addon.name())) {
                 newSnapshots.get(addon.name()).putAll(worldSnapshots);
@@ -110,10 +114,16 @@ public class UpdateTask extends BukkitRunnable {
             }
         });
         BlueMapIntegration integration = BlueBridgeCore.getInstance().getBlueMapIntegration();
-        integration.addOrUpdate(addedOrUpdated);
-        integration.remove(removed);
-        doSyncUpdate(integration);
-        lastSnapshots = newSnapshots;
+        if (integration != null) {
+            integration.addOrUpdate(addedOrUpdated);
+            integration.remove(removed);
+            doSyncUpdate(integration);
+        }
+        // Thread-safe update of lastSnapshots
+        synchronized (lastSnapshots) {
+            lastSnapshots.clear();
+            lastSnapshots.putAll(newSnapshots);
+        }
         reschedule();
     }
 

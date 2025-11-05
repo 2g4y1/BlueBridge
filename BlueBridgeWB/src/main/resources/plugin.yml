@@ -3,5 +3,5 @@ name: BlueBridgeWB
 version: ${gradleVersion}
 authors: [ ${ contributors } ]
 website: https://github.com/Mark-225/BlueBridge
-api-version: 1.13
+api-version: 1.21
 depend: [ "BlueBridgeCore" ]

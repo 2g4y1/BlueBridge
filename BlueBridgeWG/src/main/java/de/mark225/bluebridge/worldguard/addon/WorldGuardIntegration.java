@@ -72,6 +72,12 @@ public class WorldGuardIntegration {
             return true;
         } catch (FlagConflictException e) {
             BlueBridgeWG.getInstance().getLogger().severe("Custom Worldguard flags are conflicting with another plugin!");
+            BlueBridgeWG.getInstance().getLogger().severe("Details: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            BlueBridgeWG.getInstance().getLogger().severe("Failed to register WorldGuard flags!");
+            BlueBridgeWG.getInstance().getLogger().severe("This usually happens when the plugin is loaded at runtime (e.g., with PlugMan).");
+            BlueBridgeWG.getInstance().getLogger().severe("WorldGuard flags can ONLY be registered during server startup.");
+            BlueBridgeWG.getInstance().getLogger().severe("Please add BlueBridgeWG to your plugins folder and restart the server.");
         }
         return false;
     }
@@ -84,6 +90,12 @@ public class WorldGuardIntegration {
      * @return The List of region snapshots
      */
     public List<RegionSnapshot> getAllRegions(UUID worldUUID) {
+        // Check if flags were successfully registered
+        if (RENDER_FLAG == null) {
+            BlueBridgeWG.getInstance().getLogger().warning("WorldGuard flags not initialized. Cannot fetch regions.");
+            return new ArrayList<>();
+        }
+        
         org.bukkit.World bukkitWorld = Bukkit.getWorld(worldUUID);
 
         if (bukkitWorld == null) {
